@@ -1,0 +1,4 @@
+com\tus\roomservice\Room.class
+com\tus\roomservice\RoomRepository.class
+com\tus\roomservice\RoomWebService.class
+com\tus\roomservice\RoomServicesApplication.class
