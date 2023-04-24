@@ -1,29 +1,40 @@
-pipeline {
-  agent any
-  
-  environment {
-    DOCKERHUB_CREDENTIALS = credentials('dockerhub')
-  }
-  stages {
-    stage('Build') {
-      steps {
-        sh 'docker build -t class2022/dockerimg .'
-      }
+pipeline{
+    agent any
+    tools
+    {
+    dockerTool "docker"
     }
-    stage('Login') {
-      steps {
-        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-      }
+    stages{
+    stage('SonarQube analusis'){
+            
+        steps{
+        withSonarQubeEnv('sonarcicd')
+        {
+        withMaven(maven:'mavenci')
+        {
+        bat "mvn sonar:sonar"
+        }    
+        }    
+        }
+        }
+        stage('maven build')
+        {
+        steps
+        {
+        withMaven(maven:'mavenci')
+        {
+        bat "mvn clean install"
+        }
+        }
+        }
+        stage('docker build')
+        {
+        steps
+        {
+        bat 'docker build -t roomservice:latest .'
+        }
+        }
+        
     }
-    stage('Push') {
-      steps {
-        sh 'docker push class2022/dockerimg'
-      }
-    }
-  }
-  post {
-    always {
-      sh 'docker logout'
-    }
-  }
 }
+
