@@ -7,7 +7,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'docker build -t class2022/DEMON@lord00 .'
+        sh 'docker build -t class2022/dockerimg .'
       }
     }
     stage('Login') {
@@ -17,7 +17,7 @@ pipeline {
     }
     stage('Push') {
       steps {
-        sh 'docker push class2022/DEMON@lord00'
+        sh 'docker push class2022/dockerimg'
       }
     }
   }
